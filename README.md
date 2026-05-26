@@ -1,6 +1,6 @@
 # QSS 20 Final Project — Linguistic Framing of Sexual-Assault Judicial Opinions
 
-**Author:** Sarnika Ali (in collaboration with Chae Lee for QSS 20)
+**Author:** Sarnika Ali
 **Spring 2026, QSS 20 Final Project (Milestone 2)**
 
 This project is an extension of my senior QSS thesis. It analyzes how U.S. judicial opinions in sexual-assault cases linguistically frame victims and perpetrators, and whether that framing differs between male-victim and female-victim cases. The repo contains the data-pull, feature-extraction, and analysis pipeline plus the processed case-level dataset that powers the project's findings.
@@ -9,7 +9,7 @@ This project is an extension of my senior QSS thesis. It analyzes how U.S. judic
 
 ## Research question
 
-How does victim gender influence the relative frequency of perpetrator-reducing and credibility-undermining linguistic structures in U.S. judicial opinions? Specifically, I compare per-case rates of five families of linguistic framing — passive constructions, victim-vs-perpetrator agency ratios, direct-violence vocabulary, euphemism / clinical language, and hedging / credibility-challenge markers — between male-victim and female-victim cases, stratified by whether the case is a criminal prosecution or a civil suit.
+How does victim gender influence the relative frequency of perpetrator-reducing and credibility-undermining linguistic structures in U.S. judicial opinions? Specifically, I compare per-case rates of five families of linguistic framing — passive constructions, victim-vs-perpetrator agency ratios, direct-violence vocabulary, euphemism / clinical language, and hedging / credibility-challenge markers between male-victim and female-victim cases, stratified by whether the case is a criminal prosecution or a civil suit.
 
 ---
 
@@ -38,18 +38,18 @@ qss20-final-project/
 ## What each script does
 
 ### `code/01_data_pull.py` — data pull
-Fetches official court-opinion documents from the [CourtListener REST API](https://www.courtlistener.com/api/rest/v4/). For each case in the corpus it: (1) builds a search query from the parsed caption (plaintiff, defendant, year, citation), (2) searches CourtListener for the matching opinion, (3) scores candidates on caption similarity / year / jurisdiction, (4) downloads the opinion text, HTML, and PDF, and (5) writes a per-case metadata row. Falls back gracefully when a case is unfindable (CourtListener has uneven state-court coverage).
+Fetches official court-opinion documents from the [CourtListener REST API](https://www.courtlistener.com/api/rest/v4/). For each case in the corpus it: (1) builds a search query from the parsed caption (plaintiff, defendant, year, citation), (2) searches CourtListener for the matching opinion, (3) scores candidates on caption similarity / year / jurisdiction, (4) downloads the opinion text, HTML, and PDF, and (5) writes a per-case metadata row. Falls back when a case is unfindable (CourtListener has uneven state-court coverage).
 
 Optional environment variable: `CL_API_TOKEN` (raises the rate limit from ~5,000/day to ~10,000/hr).
 
 ### `code/02_extract_features.py` — clean / extract features
-Ingests each `.docx` (or `.txt`) judicial opinion, segments it into sentences, and extracts the 140+ per-case linguistic features that end up as columns in `data/cases.csv`. Features include readability scores, part-of-speech distributions, Empath topic-vocabulary rates, VADER sentiment (document- and paragraph-level), and a custom set of **19 sexual-assault-specific framing detectors** (victim-blaming, credibility challenges, procedural deflection, hedging, perpetrator naming, direct-violence vocabulary, etc.). Outputs a sentence-level annotated `.xlsx` and a per-case stats `.json`.
+Ingests each `.docx` (or `.txt`) judicial opinion, segments it into sentences, and extracts the 140+ per-case linguistic features that end up as columns in `data/cases.csv`. Features include readability scores, part-of-speech distributions, Empath topic-vocabulary rates, VADER sentiment (document- and paragraph-level), and a set of **19 sexual-assault-specific framing detectors** (victim-blaming, credibility challenges, procedural deflection, hedging, perpetrator naming, direct-violence vocabulary, etc.). Outputs a sentence-level annotated `.xlsx` and a per-case stats `.json`.
 
 ### `code/03_analyze_and_visualize.py` — analyze
-Loads `data/cases.csv`, computes within-stratum statistics (Mann-Whitney U, Cliff's δ with bootstrap CIs, Benjamini-Hochberg FDR correction across all 19 framing detectors), and regenerates the full set of thesis figures. This is the analytical core of the project.
+Loads `data/cases.csv`, computes within-stratum statistics (Mann-Whitney U, Cliff's δ with bootstrap CIs, Benjamini-Hochberg FDR correction across all 19 framing detectors), and regenerates the full set of thesis figures. This is the analytical component of the project.
 
 ### `code/04_milestone1_figures.py` — analyze (minimal example)
-A shorter, portable script that reproduces just the two starter figures from Milestone 1 directly from `data/cases.csv`. Use this if you want a clean entry point for understanding the data — it demonstrates the pandas + matplotlib workflow without the full statistical machinery.
+A shorter, portable script that reproduces just the two starter figures from Milestone 1 directly from `data/cases.csv`. Use this if you want a clean entry point for understanding the data. It demonstrates the pandas + matplotlib workflow without the full statistical machinery.
 
 ---
 
@@ -66,7 +66,7 @@ This will write `figure1_corpus_composition.png` and `figure2_direct_violence_by
 
 The full analysis script (`03_analyze_and_visualize.py`) regenerates every thesis figure and stats table from `data/cases.csv`. It additionally requires `scipy` and assumes a specific thesis-folder layout, which is documented at the top of the script.
 
-The data-pull (`01_data_pull.py`) and feature-extraction (`02_extract_features.py`) scripts require the raw `.docx` judicial opinions, which are not committed to this repo — see the **Data** section below.
+The data-pull (`01_data_pull.py`) and feature-extraction (`02_extract_features.py`) scripts require the raw `.docx` judicial opinions, which are not committed to this repo. See the **Data** section below.
 
 ---
 
@@ -92,7 +92,7 @@ The **raw `.docx` judicial opinions** are not committed to this public repositor
 
 Within criminal cases, female-victim opinions name the violence directly **much more often** than male-victim opinions. The `sa_direct_violence_term` rate has a Cliff's δ of **−0.61** (q_FDR < 0.01, Bonferroni-significant), meaning in roughly 80% of male-vs-female case pairs the female-victim opinion has the higher direct-violence-term rate. See `output/figure2_direct_violence_by_gender.png`.
 
-Perpetrator naming runs in the opposite direction (δ = +0.57, q_FDR < 0.01) — male-victim opinions name the perpetrator by surname / proper noun more often. The full forest plot of all 19 detectors is at `output/09_forest_plot.png`.
+Perpetrator naming runs in the opposite direction (δ = +0.57, q_FDR < 0.01), so male-victim opinions name the perpetrator by surname / proper noun more often. The full forest plot of all 19 detectors is at `output/09_forest_plot.png`.
 
 ---
 
