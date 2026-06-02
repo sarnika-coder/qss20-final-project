@@ -17,3 +17,7 @@ env/
 # Local intermediate files (not committed)
 *.swp
 *.tmp
+
+# Anaconda Toolbox metadata
+anaconda_projects/
+.anaconda/
