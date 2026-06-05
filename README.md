@@ -9,7 +9,7 @@ This project is an extension of my senior QSS thesis. It analyzes how U.S. judic
 
 ## Research question
 
-How does victim gender influence the relative frequency of perpetrator-reducing and credibility-undermining linguistic structures in U.S. judicial opinions? Specifically, I compare per-case rates of five families of linguistic framing — passive constructions, victim-vs-perpetrator agency ratios, direct-violence vocabulary, euphemism / clinical language, and hedging / credibility-challenge markers — between male-victim and female-victim cases, stratified by whether the case is a criminal prosecution or a civil suit.
+How does victim gender influence the relative frequency of perpetrator-reducing and credibility-undermining linguistic structures in U.S. judicial opinions? Specifically, I compare per-case rates of five families of linguistic framing (passive constructions, victim-vs-perpetrator agency ratios, direct-violence vocabulary, euphemism / clinical language, and hedging / credibility-challenge markers) between male-victim and female-victim cases, stratified by whether the case is a criminal prosecution or a civil suit.
 
 ---
 
@@ -43,7 +43,7 @@ Functions are defined at the top of each notebook; paths are resolved relative t
 
 ### `code/00_pull.ipynb` — pull
 **Inputs:** a corpus manifest of case captions/citations + optional `CL_API_TOKEN` (raises the rate limit from ~5,000/day to ~10,000/hr).
-**What it does:** for each case, builds a search query from the parsed caption, searches the [CourtListener REST API](https://www.courtlistener.com/api/rest/v4/), scores candidates on caption / year / jurisdiction, and downloads the opinion text, HTML, and PDF; prints per-case retrieval diagnostics and falls back gracefully when a case is unfindable.
+**What it does:** for each case, builds a search query from the parsed caption, searches the [CourtListener REST API](https://www.courtlistener.com/api/rest/v4/), scores candidates on caption / year / jurisdiction, and downloads the opinion text, HTML, and PDF; prints per-case retrieval diagnostics and falls back when a case is unfindable.
 **Outputs:** raw opinion files under `data/raw_opinions/` (not committed) + a per-case metadata table.
 
 ### `code/01_features.ipynb` — features (clean + merge)
@@ -73,7 +73,7 @@ jupyter nbconvert --to notebook --execute code/02_analyze.ipynb
 
 ## Data
 
-The processed dataset `data/cases.csv` has **one row per case** (n = 97 U.S. judicial opinions) and ~140 columns. **All text-derived features are computed on the opinion text only** — editorial headnotes / syllabi are stripped before feature extraction, so that the analysis measures the court's own language rather than a reporter's summary. Key column families:
+The processed dataset `data/cases.csv` has **one row per case** (n = 97 U.S. judicial opinions) and ~140 columns. **All text-derived features are computed on the opinion text only**; editorial headnotes / syllabi are stripped before feature extraction, so that the analysis measures the court's own language rather than a reporter's summary. Key column families:
 
 | Column family | Examples | What it captures |
 |---|---|---|
